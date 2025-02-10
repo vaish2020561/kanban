@@ -1,29 +1,33 @@
 const express = require("express");
-
 const app = express();
+const connectDB = require("./config/database")
+const User = require("./models/user");
 
-app.get("/user",(req,res) => {
-    res.send({ firstName: "Vaishnavi", lastName: "Bharti", age: 23});
-});
-app.post("/user",(req, res) => {
-//    console.log(" data saved sucessfully to db");
-   res.send("data saved succesfully to db");
-});
-app.delete("/user",(req, res) => {
-//    console.log(" data saved sucessfully to db");
-   res.send("data deleted");
+ // to read the json data we need a middleware
+app.use(express.json());
+
+
+app.post("/signup",async (req, res) => {
+    // creating a instannce of the user model 
+    const user =  new User(req.body);
+    try{
+        await user.save();
+        res.send(" user added in kanban ");
+    } catch(err){
+        res.status(400).send("Error saving the user:" + err.message);
+    }
+   
 });
 
-// app.use("/hello",(req, res) => {
-//     res.send("Hello ");
-// });
-// app.use("/",(req, res) => {
-//     res.send("Hello from server");
-// });
 
-// app.use("/dashboard",(req, res) => {
-//     res.send("Hello from dashboard");
-// });
-app.listen(3000 , () =>{
-    console.log("server is sucessfully running");
-});
+
+
+
+connectDB().then(() =>{
+    console.log('Connected to the database');
+    app.listen(3000 , () =>{
+        console.log("server is sucessfully running");
+    });
+ }).catch( err =>{
+     console.log(' not Connected to the database');
+ })
