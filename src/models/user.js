@@ -18,20 +18,9 @@ const userSchema = mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
-        minlength: 6,
-      },
-      role: {
-        type: String,
-        enum: ["user", "admin"], // Add roles if needed
-        default: "user",
-      },
-      boards: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Board", // Reference to Kanban boards
-        },
-      ],
+        
+      }
+     
 });
 
 
